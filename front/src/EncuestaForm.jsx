@@ -13,6 +13,7 @@ const EncuestaForm = () => {
   const [titulo, setTitulo] = useState("");
   const [descripcion, setDescripcion] = useState("");
   const [comenzar, setComenzar] = useState(false);
+  const [errorEncuesta, setErrorEncuesta] = useState(null);
 
   useEffect(() => {
     const cargarDatos = async () => {
@@ -20,12 +21,22 @@ const EncuestaForm = () => {
         const response = await fetch(`${API_URL}/api/encuestas/${token}`);
         const data = await response.json();
 
+        if (!response.ok) {
+          setErrorEncuesta(data.error || "¡Lo sentimos!");
+
+          setCargando(false);
+          return;
+        }
+
         setTitulo(data.titulo);
         setDescripcion(data.descripcion);
-        setPreguntas(data.preguntas);
-        setCargando(false);
+        setPreguntas(data.preguntas || []);
       } catch (error) {
-        console.error("Error al cargar la encuesta", error);
+        console.error(error);
+
+        setErrorEncuesta("No pudimos conectar con el servidor.");
+      } finally {
+        setCargando(false);
       }
     };
 
@@ -141,7 +152,7 @@ const EncuestaForm = () => {
             Object.keys(respuesta).length === 0);
 
         if (vacio) {
-          nuevosErrores[pregunta.cdPregunta] = "Esta pregunta es obligatoria";
+          nuevosErrores[pregunta.cdPregunta] = "Esta pregunta es obligatoria.";
         }
       }
     }
@@ -196,13 +207,25 @@ const EncuestaForm = () => {
     }
   };
 
-  if (cargando) return <p>Cargando encuesta...</p>;
+  if (cargando) {
+    return (
+      <div className="bienvenida-container estado-container">
+        <div className="estado-card">
+          <div className="spinner"></div>
+
+          <h2>Cargando encuesta</h2>
+
+          <p>Espere un momento...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!comenzar) {
     return (
       <div className="bienvenida-container">
         <div className="bienvenida-card">
-          <img src="/public/HP.png" alt="" className="logo-bienvenida" />
+          <img src="/HP.png" alt="" className="logo-bienvenida" />
           {/*<h1>{titulo}</h1>*/}
           <h1 className="titulo-bienvenida">Su opinión nos ayuda a mejorar</h1>
           <p className="descripcion">
@@ -241,6 +264,20 @@ const EncuestaForm = () => {
             <br />
             Gracias por su tiempo.
           </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (errorEncuesta) {
+    return (
+      <div className="final-container estado-container">
+        <div className="estado-card">
+          <div className="estado-icon error-icon">!</div>
+
+          <h2>Encuesta no disponible</h2>
+
+          <p>{errorEncuesta}</p>
         </div>
       </div>
     );
@@ -372,50 +409,52 @@ const EncuestaForm = () => {
             )}
 
             {pregunta.tipo === "matrix" && (
-              <table>
-                <thead>
-                  <tr>
-                    <th>Aspecto</th>
-                    {[1, 2, 3, 4, 5].map((n) => (
-                      <th key={n}>{n}</th>
-                    ))}
-                  </tr>
-                </thead>
+              <>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Aspecto</th>
+                      {[1, 2, 3, 4, 5].map((n) => (
+                        <th key={n}>{n}</th>
+                      ))}
+                    </tr>
+                  </thead>
 
-                <tbody>
-                  {pregunta.opciones?.map((aspecto) => {
-                    const selected = respuestas[pregunta.cdPregunta] || {};
+                  <tbody>
+                    {pregunta.opciones?.map((aspecto) => {
+                      const selected = respuestas[pregunta.cdPregunta] || {};
 
-                    return (
-                      <tr key={aspecto.cdOpcion}>
-                        <td>{aspecto.texto}</td>
+                      return (
+                        <tr key={aspecto.cdOpcion}>
+                          <td>{aspecto.texto}</td>
 
-                        {[1, 2, 3, 4, 5].map((num) => (
-                          <td key={num} className="celda-matrix">
-                            <label className="matrix-option">
-                              <input
-                                type="radio"
-                                name={`matrix_${aspecto.cdOpcion}`}
-                                checked={selected[aspecto.cdOpcion] === num}
-                                onChange={() =>
-                                  handleMatrixChange(
-                                    pregunta.cdPregunta,
-                                    aspecto.cdOpcion,
-                                    num
-                                  )
-                                }
-                              />
-                            </label>
-                          </td>
-                        ))}
-                      </tr>
-                    );
-                  })}
-                  {errores[pregunta.cdPregunta] && (
-                    <p className="error-text">{errores[pregunta.cdPregunta]}</p>
-                  )}
-                </tbody>
-              </table>
+                          {[1, 2, 3, 4, 5].map((num) => (
+                            <td key={num} className="celda-matrix">
+                              <label className="matrix-option">
+                                <input
+                                  type="radio"
+                                  name={`matrix_${aspecto.cdOpcion}`}
+                                  checked={selected[aspecto.cdOpcion] === num}
+                                  onChange={() =>
+                                    handleMatrixChange(
+                                      pregunta.cdPregunta,
+                                      aspecto.cdOpcion,
+                                      num
+                                    )
+                                  }
+                                />
+                              </label>
+                            </td>
+                          ))}
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+                {errores[pregunta.cdPregunta] && (
+                  <p className="error-text">{errores[pregunta.cdPregunta]}</p>
+                )}
+              </>
             )}
 
             {pregunta.tipo === "text" && (

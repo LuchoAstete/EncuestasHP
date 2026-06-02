@@ -1,4 +1,5 @@
 import { pool, poolConnect } from "../db.js";
+import sql from "mssql";
 
 const transformarPayload = (respuestas) => {
   const detalles = [];
@@ -62,19 +63,19 @@ export const getEncuesta = async (req, res) => {
     await poolConnect;
 
     const token = req.params.token;
-
     const result = await pool
       .request()
-      .input("token", token)
+      .input("token", sql.UniqueIdentifier, token)
+      
       .execute("Get_Encuestas");
 
-    const titulo = result.recordsets[0];
-    const preguntas = result.recordsets[1];
-    const opciones = result.recordsets[2];
+      const titulo = result.recordsets[0] || [];
+      const preguntas = result.recordsets[1] || [];
+      const opciones = result.recordsets[2] || [];
 
-    if (!titulo.length) {
-      return res.status(404).json({
-        error: "Encuesta no válida",
+    if (result.recordset.length === 0) {
+      return res.status(410).json({
+        error: "Lo sentimos, esta encuesta ya no está disponible",
       });
     }
 
@@ -104,7 +105,7 @@ export const getEncuesta = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
-      error: "Error al obtener encuesta1",
+      error: "Lo sentimos, esta encuesta ya no se encuentra disponible",
     });
   }
 };
