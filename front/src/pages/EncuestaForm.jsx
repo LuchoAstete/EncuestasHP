@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./index.css";
+import "../styles/index.css";
 
 const EncuestaForm = () => {
   const [preguntas, setPreguntas] = useState([]);

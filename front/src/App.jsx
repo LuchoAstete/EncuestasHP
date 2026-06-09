@@ -1,11 +1,19 @@
-import React from 'react';
-import EncuestaForm from './EncuestaForm';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import EncuestaForm from "./pages/EncuestaForm";
+import EncuestasAdmin from "./pages/EncuestasAdmin";
 
 function App() {
   return (
-    <div className="min-h-screen bg-gray-100 p-4">
-      <EncuestaForm />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        {/* Panel administrativo */}
+        <Route path="/admin" element={<EncuestasAdmin />} />
+
+        {/* Encuestas por token */}
+        <Route path="/:token" element={<EncuestaForm />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
