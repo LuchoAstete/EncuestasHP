@@ -27,7 +27,7 @@ export default function Encuestas({ cdSucursal }) {
   }
 
   function abrirEncuesta(token) {
-    sessionStorage.setItem("origenEncuesta", "MANUAL");
+    sessionStorage.setItem("origenEncuesta", "2");
     window.location.href = `/${token}`;
   }
 
@@ -35,15 +35,21 @@ export default function Encuestas({ cdSucursal }) {
     <div className="encuestas-container">
       <h2>Encuestas disponibles</h2>
 
-      {encuestas.map((item) => (
-        <button
-          key={item.cdEncuesta}
-          className="encuesta-button"
-          onClick={() => abrirEncuesta(item.dsToken)}
-        >
-          {item.dsEncuesta}
-        </button>
-      ))}
+      {encuestas.length === 0 ? (
+        <p className="sin-encuestas">
+          No hay encuestas vigentes para esta sucursal.
+        </p>
+      ) : (
+        encuestas.map((item) => (
+          <button
+            key={item.cdEncuesta}
+            className="encuesta-button"
+            onClick={() => abrirEncuesta(item.dsToken)}
+          >
+            {item.dsEncuesta}
+          </button>
+        ))
+      )}
     </div>
   );
 }

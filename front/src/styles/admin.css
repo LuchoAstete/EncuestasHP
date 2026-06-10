@@ -40,7 +40,7 @@
 .selector-label{
     display:block;
     margin-bottom:10px;
-    color:#5c667a;
+    color:#4b5261;
     font-size:15px;
     font-weight:600;
 }
@@ -89,3 +89,12 @@
     background:#179357;
 }
 
+.sin-encuestas {
+    margin-top: 20px;
+    padding: 20px;
+    text-align: center;
+    color: #666;
+    background-color: #f5f5f5;
+    border-radius: 10px;
+    font-size: 16px;
+  }
