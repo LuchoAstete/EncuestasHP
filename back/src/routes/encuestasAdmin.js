@@ -1,19 +1,24 @@
 import { Router } from "express";
+
 import {
-    listarEncuestas,
-    crearEncuesta,
-    actualizarEncuesta,
-    listarCatalogos
-} from "../controllers/encuestasAdmin.js";
+    listarSucursales,
+    //listarEncuestasVigentes,
+    obtenerSucursalPorToken,
+    listarEncuestasSucursal
+}
+from "../controllers/encuestasAdmin.js";
 
 const router = Router();
 
-router.get("/", listarEncuestas);
+router.get("/", listarSucursales);
 
-router.get("/catalogos", listarCatalogos);
+router.get("/sucursal/:cdSucursal", listarEncuestasSucursal);
 
-router.post("/", crearEncuesta);
 
-router.put("/:id", actualizarEncuesta);
+
+router.get(
+    "/token/:token",
+    obtenerSucursalPorToken
+);
 
 export default router;

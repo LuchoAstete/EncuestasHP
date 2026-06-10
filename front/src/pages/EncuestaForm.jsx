@@ -14,12 +14,23 @@ const EncuestaForm = () => {
   const [descripcion, setDescripcion] = useState("");
   const [comenzar, setComenzar] = useState(false);
   const [errorEncuesta, setErrorEncuesta] = useState(null);
+  const [origenEncuesta, setOrigenEncuesta] = useState("1");
 
   useEffect(() => {
     const cargarDatos = async () => {
       try {
-        const response = await fetch(`${API_URL}/api/encuestas/${token}`);
+        const response = await fetch(`${API_URL}/api/encuestas/${token}`, {
+          cache: "no-store",
+        });
         const data = await response.json();
+        const params = new URLSearchParams(window.location.search);
+        const fromQR = params.get("qr");
+
+        if (fromQR === "1") {
+          setOrigenEncuesta(1);
+        } else if (sessionStorage.getItem("origenEncuesta") === "2") {
+          setOrigenEncuesta(2);
+        }
 
         if (!response.ok) {
           setErrorEncuesta(data.error || "¡Lo sentimos!");
@@ -188,6 +199,7 @@ const EncuestaForm = () => {
         body: JSON.stringify({
           token,
           respuestas,
+          cdOrigen: origenEncuesta,
         }),
       });
 

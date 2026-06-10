@@ -1,36 +1,21 @@
 import {
-    getEncuestas,
-    insertEncuesta,
-    updateEncuesta,
-    getCatalogos
+    getSucursales,
+    //getEncuestasVigentes,
+    getSucursalPorToken,
+    getEncuestasSucursal
 } from "../services/encuestasAdmin.js";
 
-export const listarEncuestas = async (req, res) => {
+
+export const listarSucursales = async (req, res) => {
+
     try {
 
-        const data = await getEncuestas();
+        const data = await getSucursales();
 
         res.json(data);
 
-    } catch (error) {
-
-        res.status(500).json(error.message);
-
     }
-};
-
-export const crearEncuesta = async (req, res) => {
-
-    try {
-
-        await insertEncuesta(req.body);
-
-        res.json({
-            ok: true,
-            mensaje: "Encuesta creada"
-        });
-
-    } catch (error) {
+    catch (error) {
 
         res.status(500).json(error.message);
 
@@ -38,52 +23,60 @@ export const crearEncuesta = async (req, res) => {
 
 };
 
-export const actualizarEncuesta = async (req, res) => {
+/*
+export const listarEncuestasVigentes = async (req, res) => {
 
     try {
 
-        await updateEncuesta(req.params.id, req.body);
-
-        res.json({
-            ok: true
-        });
-
-    } catch (error) {
-
-        res.status(500).json(error.message);
-
-    }
-
-};
-
-export const listarCatalogos = async (req, res) => {
-
-    try {
-
-        const data = await getCatalogos();
+        const data = await getEncuestasVigentes(
+            req.params.cdEncuestaSucursal
+        );
 
         res.json(data);
 
-    } catch (error) {
-
-        res.status(500).json(error.message);
-
     }
-
-};
-
-/*export const regenerarToken = async (req, res) => {
-
-    try {
-
-        const token = await renovarToken(req.params.id);
-
-        res.json(token);
-
-    } catch (error) {
+    catch (error) {
 
         res.status(500).json(error.message);
 
     }
 
 };*/
+
+
+export const obtenerSucursalPorToken = async (req, res) => {
+
+    try {
+
+        const data = await getSucursalPorToken(
+            req.params.token
+        );
+
+        res.json(data);
+
+    }
+    catch (error) {
+
+        res.status(500).json(error.message);
+
+    }
+
+};
+
+export const listarEncuestasSucursal = async (req, res) => {
+
+    try {
+
+        const data = await getEncuestasSucursal(
+            req.params.cdSucursal
+        );
+
+        res.json(data);
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json(error.message);
+
+    }
+
+};

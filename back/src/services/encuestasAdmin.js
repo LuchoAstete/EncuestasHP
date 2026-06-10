@@ -1,54 +1,44 @@
 import sql from "mssql";
 import { pool } from "../db.js";
-import crypto from "crypto";
 
-export const insertEncuesta = async (data) => {
-
-    await pool.request()
-        .input("accion", sql.VarChar, "INSERTAR")
-        .input("cdEncuesta", sql.Int, data.cdEncuesta)
-        .input("cdSucursal", sql.Int, data.cdSucursal)
-        .input("dsToken", sql.UniqueIdentifier, crypto.randomUUID())
-        .input("dtFechaDesde", sql.DateTime, data.dtFechaDesde)
-        .input("dtFechaHasta", sql.DateTime, data.dtFechaHasta)
-        .input("icActivo", sql.Bit, data.icActivo)
-        .input("cdOrigen", sql.Int, data.cdOrigen)
-        .execute("SPR_EncuestasSucursales");
-
-};
-
-export const getEncuestas = async () => {
+export const getSucursales = async () => {
 
     const result = await pool.request()
-        .input("accion", sql.VarChar, "LISTAR")
+        .input("accion", sql.VarChar, "LISTAR_SUCURSALES")
         .execute("SPR_EncuestasSucursales");
 
     return result.recordset;
 
 };
 
-export const updateEncuesta = async (id, data) => {
+/*export const getEncuestasVigentes = async (cdEncuestaSucursal) => {
 
-    await pool.request()
-        .input("accion", sql.VarChar, "ACTUALIZAR")
-        .input("cdEncuestaSucursal", sql.Int, id)
-        .input("dtFechaDesde", sql.DateTime, data.fechaInicio)
-        .input("dtFechaHasta", sql.DateTime, data.fechaFin)
-        .input("icActivo", sql.Bit, data.activa)
+    const result = await pool.request()
+        .input("accion", sql.VarChar, "LISTAR_ENCUESTAS_VIGENTES")
+        .input("cdEncuestaSucursal", sql.Int, cdEncuestaSucursal)
         .execute("SPR_EncuestasSucursales");
+
+    return result.recordset;
+
+};*/
+
+export const getSucursalPorToken = async (token) => {
+
+    const result = await pool.request()
+        .input("accion", sql.VarChar, "OBTENER_POR_TOKEN")
+        .input("dsToken", sql.UniqueIdentifier, token)
+        .execute("SPR_EncuestasSucursales");
+
+    return result.recordset[0];
 
 };
 
-export const getCatalogos = async () => {
-
+export const getEncuestasSucursal = async (cdSucursal) => {
 
     const result = await pool.request()
-        .execute("SPR_EncuestasCatalogos");
+        .input("accion", sql.VarChar, "LISTAR_ENCUESTAS_VIGENTES")
+        .input("cdSucursal", sql.Int, cdSucursal)
+        .execute("SPR_EncuestasSucursales");
 
-    return {
-        encuestas: result.recordsets[0],
-        sucursales: result.recordsets[1],
-        origenes: result.recordsets[2]
-    };
-
+    return result.recordset;
 };

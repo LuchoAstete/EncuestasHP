@@ -114,7 +114,7 @@ export const guardarRespuestas = async (req, res) => {
   try {
     await poolConnect;
 
-    const { token, respuestas } = req.body;
+    const { token, respuestas, cdOrigen } = req.body;
 
     const detalles = transformarPayload(respuestas);
 
@@ -122,6 +122,7 @@ export const guardarRespuestas = async (req, res) => {
       .request()
       .input("token", token)
       .input("json", JSON.stringify(detalles))
+      .input("cdOrigen", cdOrigen)
       .execute("Insert_Respuestas");
 
     res.json({

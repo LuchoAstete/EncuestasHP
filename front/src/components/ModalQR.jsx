@@ -27,40 +27,27 @@ export default function QRModal({ mostrarQR, encuestaSeleccionada, cerrar }) {
   }
 
   return (
-    <div
-      style={{
-        position: "fixed",
-        inset: 0,
-        background: "rgba(0,0,0,.5)",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <div
-        style={{
-          background: "#fff",
-          padding: 30,
-          borderRadius: 10,
-        }}
-      >
-        <h2>QR de la encuesta</h2>
+    <div className="modal-overlay">
+      <div className="qr-modal">
+        <h2 className="modal-title"></h2>
 
-        <div ref={qrRef}>
-          <QRCodeCanvas value={url} size={250} />
+        <div className="qr-container">
+          <div ref={qrRef}>
+            <QRCodeCanvas value={url} size={250} />
+          </div>
         </div>
 
-        <br />
+        <div className="qr-url">{url}</div>
 
-        <div>{url}</div>
+        <div className="modal-footer">
+          <button className="btn-secondary" onClick={cerrar}>
+            Cerrar
+          </button>
 
-        <br />
-
-        <button onClick={descargarQR}>Descargar QR</button>
-
-        <button onClick={cerrar} style={{ marginLeft: 10 }}>
-          Cerrar
-        </button>
+          <button className="btn-primary" onClick={descargarQR}>
+            Descargar QR
+          </button>
+        </div>
       </div>
     </div>
   );

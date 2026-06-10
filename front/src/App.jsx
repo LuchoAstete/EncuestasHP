@@ -1,16 +1,16 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+import Index from "./pages/index";
 import EncuestaForm from "./pages/EncuestaForm";
-import EncuestasAdmin from "./pages/EncuestasAdmin";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Panel administrativo */}
-        <Route path="/admin" element={<EncuestasAdmin />} />
+        {/* Pantalla principal para vendedores */}
+        <Route path="/" element={<Index />} />
 
-        {/* Encuestas por token */}
+        {/* Encuestas por token (QR o URL directa) */}
         <Route path="/:token" element={<EncuestaForm />} />
       </Routes>
     </BrowserRouter>
