@@ -469,13 +469,31 @@ const EncuestaForm = () => {
               </>
             )}
 
-            {pregunta.tipo === "text" && (
+            {pregunta.tipo === "textarea" && (
               <>
                 <textarea
                   className="input-text"
                   placeholder="Escriba su respuesta..."
                   rows={3}
                   maxLength={500}
+                  value={respuestas[pregunta.cdPregunta] || ""}
+                  onChange={(e) =>
+                    handleChange(pregunta.cdPregunta, e.target.value)
+                  }
+                />
+                {errores[pregunta.cdPregunta] && (
+                  <p className="error-text">{errores[pregunta.cdPregunta]}</p>
+                )}
+              </>
+            )}
+
+            {pregunta.tipo === "text" && (
+              <>
+                <input
+                  type="text"
+                  className="input-text"
+                  placeholder="Escriba su respuesta..."
+                  maxLength={100}
                   value={respuestas[pregunta.cdPregunta] || ""}
                   onChange={(e) =>
                     handleChange(pregunta.cdPregunta, e.target.value)
