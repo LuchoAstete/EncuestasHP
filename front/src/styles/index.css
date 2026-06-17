@@ -56,13 +56,6 @@ h3 {
   color: var(--text);
 }
 
-.descripcion {
-  color: var(--text-light);
-  line-height: 1.6;
-  max-width: 320px;
-  margin: 0 auto 34px;
-}
-
 .bloque {
   margin-bottom: 25px;
   border-bottom: 1px solid #ddd;
@@ -122,9 +115,10 @@ td:first-child {
   border: none;
   border-radius: 6px;
   font-weight: 600;
-  font-size: large;
+  font-size: medium;
   cursor: pointer;
   transition: 0.2s;
+  margin-bottom:15px;
 }
 
 .btn:hover {
@@ -289,7 +283,7 @@ input[type="checkbox"] {
 .bienvenida-card .descripcion {
   line-height: 1.6;
   max-width: 340px;
-  margin: 0 auto 34px;
+  margin: 0 auto 24px;
 }
 
 .btn-comenzar {
@@ -454,4 +448,9 @@ textarea:focus {
   to {
     transform: rotate(360deg);
   }
+}
+.subtitulo-encuestas{
+  margin-bottom:20px;
+  color: var(--primary);
+  font-size:1.2rem;
 }

@@ -10,8 +10,8 @@ function App() {
         {/* Pantalla principal para vendedores */}
         <Route path="/" element={<Index />} />
 
-        {/* Encuestas por token (QR o URL directa) */}
-        <Route path="/:token" element={<EncuestaForm />} />
+        {/* Encuestas por cdEncuestaSucursal (QR o URL directa) */}
+        <Route path="/:cdEncuestaSucursal" element={<EncuestaForm />} />
       </Routes>
     </BrowserRouter>
   );

@@ -17,7 +17,7 @@ export default function Encuestas({ cdSucursal }) {
   async function cargarEncuestas() {
     try {
       const response = await axios.get(
-        `${API}/api/sucursales/sucursal/${cdSucursal}`
+        `${API}/api/sucursales/${cdSucursal}/encuestas`
       );
 
       setEncuestas(response.data);
@@ -26,9 +26,10 @@ export default function Encuestas({ cdSucursal }) {
     }
   }
 
-  function abrirEncuesta(token) {
+  function abrirEncuesta(cdEncuestaSucursal) {
     sessionStorage.setItem("origenEncuesta", "2");
-    window.location.href = `/${token}`;
+    sessionStorage.setItem("cdEncuestaSucursal", cdEncuestaSucursal);
+    window.location.href = `/${cdEncuestaSucursal}`;
   }
 
   return (
@@ -44,7 +45,7 @@ export default function Encuestas({ cdSucursal }) {
           <button
             key={item.cdEncuesta}
             className="encuesta-button"
-            onClick={() => abrirEncuesta(item.dsToken)}
+            onClick={() => abrirEncuesta(item.cdEncuestaSucursal)}
           >
             {item.dsEncuesta}
           </button>

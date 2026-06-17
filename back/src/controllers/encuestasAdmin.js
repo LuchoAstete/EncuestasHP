@@ -3,7 +3,7 @@ import {
     //getEncuestasVigentes,
     getSucursalPorToken,
     getEncuestasSucursal
-} from "../services/encuestasAdmin.js";
+} from "../services/encuestas.service.js";
 
 
 export const listarSucursales = async (req, res) => {
